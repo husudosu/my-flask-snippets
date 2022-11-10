@@ -1,0 +1,163 @@
+{
+    "Flask MethodView": {
+        "scope": "python",
+        "prefix": "fmview",
+        "body": [
+            "class ${1:Resourcename}API(MethodView):",
+            "    decorators = [${2}]",
+            "",
+            "    def get(self):",
+            "        \"\"\"",
+            "        Gets ${1:Resourcename}.",
+            "        \"\"\"",
+            "        pass${0}",
+            "",
+            "    def post(self):",
+            "        \"\"\"",
+            "        Create ${1:Resourcename}.",
+            "        \"\"\"",
+            "        pass",
+            "",
+            "    def patch(self, id: int):",
+            "        \"\"\"",
+            "        Updates ${1:Resourcename}.",
+            "        \"\"\"",
+            "        pass",
+            "",
+            "    def delete(self, id: int):",
+            "        \"\"\"",
+            "        Deletes ${1:Resourcename}.",
+            "        \"\"\"",
+            "        pass",
+            "",
+            "${1/(.*)/${1:/downcase}/}_view = ${1:Resourcename}API.as_view(\"${1/(.*)/${1:/downcase}/}-view\")"
+        ],
+        "description": "Creates Flask method view with HTTP methods [GET, POST, PATCH, DELETE]."
+    },
+    "Flask controller": {
+        "scope": "python",
+        "prefix": "fcontroller",
+        "body": [
+            "class ${1:Entity}Controller:",
+            "    \"\"\"",
+            "    Contains business logic for ${1:Entity}.",
+            "    \"\"\"",
+            "",
+            "    def get(self, id=None) -> typing.Union[${3:EntityModel}, typing.List[${3:EntityModel}]]:",
+            "        \"\"\"Gets all ${1:Entity} or if ID provided only one",
+            "",
+            "        Args:",
+            "            id (_type_, optional): ${1:Entity} ID to get. Defaults to None.",
+            "        \"\"\"",
+            "        return {}${0}",
+            "",
+            "    def post(self) -> ${3:EntityModel}:",
+            "        \"\"\"Creates ${1:Entity}.",
+            "        \"\"\"",
+            "        return {}",
+            "",
+            "    def patch(self, ${2:entity}: ${3:EntityModel}, data: dict) -> ${3:EntityModel}:",
+            "        \"\"\"Updates ${1:Entity}.",
+            "",
+            "        Args:",
+            "            ${2:entity} (${3:EntityModel}): ${1:Entity} to update.",
+            "            data (dict): Update payload",
+            "",
+            "        Returns:",
+            "            ${3:EntityModel}: Updated ${1:Entity}.",
+            "        \"\"\"",
+            "        return {}",
+            "",
+            "    def delete(self, ${2:entity}: ${3:EntityModel}):",
+            "        \"\"\"Deletes ${1:Entity}",
+            "",
+            "        Args:",
+            "            ${2:entity} (${3:EntityModel}): ${1:Entity} to delete.",
+            "        \"\"\"",
+            "        return {}"
+        ],
+        "description": "Controller for flask"
+    },
+    "Marshmallow SQLAlchemy schema ": {
+        "scope": "python",
+        "prefix": "masqlaschema",
+        "body": [
+            "class ${1}Schema(SQLAlchemySchema):",
+            "",
+            "    class Meta:",
+            "        model = ${2}",
+            "",
+            "    id = fields.Integer(dump_only=True)",
+            ""
+        ],
+        "description": "Creates marshmallow schema with meta"
+    },
+    "SQLAlchemy model": {
+        "scope": "python",
+        "prefix": "sqlamodel",
+        "body": [
+            "class ${1}(db.model, BaseMixin):",
+            "    \"\"\"${1} sqlalchemy model\"\"\"",
+            "",
+            "    __tablename__ = \"${1}\"",
+            "",
+            "    id = sqla.Column(sqla.Integer, primary_key=True)",
+            "",
+            "    def __repr__(self):",
+            "        return f\"${1}({self.id})\""
+        ],
+        "description": "SQLAlchemy model"
+    },
+    "SQLAlchemy BaseMixin class": {
+        "scope": "python",
+        "prefix": "sqlabasemixin",
+        "body": [
+            "class BaseMixin(object):",
+            "",
+            "    @classmethod",
+            "    def get_or_404(cls, id):",
+            "        m = cls.query.get(id)",
+            "        if m is None:",
+            "            raise NotFound(f\"{cls.__tablename__} not exists\")",
+            "        return m",
+            "",
+            "    def update(self, **kw):",
+            "        for key, value in kw.items():",
+            "            if hasattr(self, key):",
+            "                setattr(self, key, value)"
+        ],
+        "description": "Creates a basic SQLAlchemy mixin which contains get_or_404 and update method. NotFound exception imported from werkzeug.exceptions"
+    },
+    "SQLAlchemy filter": {
+        "scope": "python",
+        "prefix": "sqlaqf",
+        "body": ["${1}.query.filter(${1}.${2} == ${3})"],
+        "description": "Simple SQLAlchemy filter query."
+    },
+    "SQLAlchemy filter using and": {
+        "scope": "python",
+        "prefix": "sqlafa",
+        "body": [
+            "${1}.query.filter(",
+            "    sqla.and_(",
+            "        ${1}.${2} == ${3},",
+            "        ${1}.${4} == ${5}",
+            "    )",
+            ")${0}"
+        ],
+        "description": "Sqlalchemy filter query contains and. You should import sqlalchemy as sqla for this!"
+    },
+    "SQLAlchemy filter using or": {
+        "scope": "python",
+        "prefix": "sqlafo",
+        "body": [
+            "${1}.query.filter(",
+            "    sqla.or_(",
+            "        ${1}.${2} == ${3},",
+            "        ${1}.${4} == ${5}",
+            "    )",
+            ")${0}"
+        ],
+        "description": "Sqlalchemy filter query contains or. You should import sqlalchemy as sqla for this!"
+    }
+}
